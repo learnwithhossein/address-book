@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
+using System.Collections.Generic;
+using Service.Common;
 
 namespace Api.Controllers
 {
@@ -57,6 +57,13 @@ namespace Api.Controllers
             {
                 return NotFound(e.Message);
             }
+        }
+
+        [HttpGet("find")]
+        public IActionResult Find([FromQuery] string name, [FromQuery] string phone, [FromQuery] string address)
+        {
+            var result = _repository.Find(name, phone, address);
+            return Ok(result);
         }
     }
 }
