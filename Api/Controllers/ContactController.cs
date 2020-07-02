@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
 using System.Collections.Generic;
-using Service.Common;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
