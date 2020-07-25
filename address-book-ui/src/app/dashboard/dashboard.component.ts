@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/services/api.service';
+import { Contact } from 'src/models/contact';
 
 @Component({
     selector: 'app-dashboard',
@@ -7,6 +8,8 @@ import { ApiService } from 'src/services/api.service';
     styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
+    contacts: Contact[];
 
     constructor(private api: ApiService) { }
 
@@ -17,11 +20,12 @@ export class DashboardComponent implements OnInit {
         };
 
         this.api.contact.find(criteria).subscribe(data => {
-            this.contacts = data;
+            this.contacts = data as Contact[];
         });
     }
 
-    contacts;
-    title = 'address-book-ui';
-
+    deleteContact = (id: number) => {
+        const index = this.contacts.findIndex(x => x.id === id);
+        this.contacts.splice(index, 1);
+    }
 }

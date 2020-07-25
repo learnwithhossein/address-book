@@ -1,18 +1,37 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
-import { AppComponent } from './components/app/app.component';
-import { DashboardComponent } from './components/app/dashboard/dashboard.component';
-import { ContactCardComponent } from './components/app/dashboard/contact-card/contact-card.component';
+import { AppComponent } from './app/app.component';
+import { DashboardComponent } from './app/dashboard/dashboard.component';
+import { ContactCardComponent } from './app/dashboard/contact-card/contact-card.component';
+import { NavbarComponent } from './app/navbar/navbar.component';
+import { SearchComponent } from './app/search/search.component';
+import { RegisterComponent } from './app/register/register.component';
+import { NotfoundComponent } from './app/notfound/notfound.component';
+import { RouterModule } from '@angular/router';
+import { routes } from './routes';
 
 @NgModule({
     declarations: [
         AppComponent,
         DashboardComponent,
-        ContactCardComponent
+        ContactCardComponent,
+        NavbarComponent,
+        SearchComponent,
+        RegisterComponent,
+        NotfoundComponent
     ],
     imports: [
+        CommonModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        ModalModule.forRoot(),
+        RouterModule.forRoot(routes),
         BrowserModule,
         HttpClientModule
     ],
