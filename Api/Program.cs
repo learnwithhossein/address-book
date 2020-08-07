@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persist;
 using System;
+using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Api
 {
@@ -27,8 +29,10 @@ namespace Api
             try
             {
                 var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+
                 context.Database.Migrate();
-                Seeder.Seed(context);
+                Seeder.Seed(context, userManager);
             }
             catch (Exception ex)
             {

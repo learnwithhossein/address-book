@@ -1,13 +1,19 @@
 using System.Net;
+using System.Text;
+using Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Persist;
+using Service.Auth;
 using Service.Common;
 using Service.Contacts;
 
@@ -30,6 +36,8 @@ namespace Api
             });
 
             services.AddScoped<ContactRepository, ContactRepository>();
+            services.AddScoped<AuthRepository, AuthRepository>();
+            services.AddScoped<TokenGenerator, TokenGenerator>();
 
             services.AddCors(options =>
             {
@@ -40,6 +48,27 @@ namespace Api
                         .AllowAnyHeader();
                 });
             });
+
+            services.AddIdentityCore<User>()
+                .AddUserManager<UserManager<User>>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddEntityFrameworkStores<DataContext>();
+
+            var secret = Configuration.GetSection("Secret").Value;
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    };
+                });
 
             services.AddControllers();
         }
@@ -68,6 +97,8 @@ namespace Api
             app.UseRouting();
 
             app.UseCors();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
