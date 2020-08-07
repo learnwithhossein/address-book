@@ -1,10 +1,14 @@
+using System.Net;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persist;
+using Service.Common;
 using Service.Contacts;
 
 namespace Api
@@ -40,14 +44,26 @@ namespace Api
             services.AddControllers();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            app.UseExceptionHandler(builder =>
             {
-                app.UseDeveloperExceptionPage();
-            }
+                builder.Run(async context =>
+                {
+                    var feature = context.Features.Get<IExceptionHandlerFeature>();
+                    var error = feature.Error;
 
-            app.UseHttpsRedirection();
+                    var statusCode = error is RestException restException
+                        ? restException.StatusCode
+                        : HttpStatusCode.InternalServerError;
+
+                    context.Response.StatusCode = (int) statusCode;
+                    var message = statusCode == HttpStatusCode.InternalServerError
+                        ? "An error occured in server, please try later."
+                        : error.Message;
+                    await context.Response.WriteAsync(message);
+                });
+            });
 
             app.UseRouting();
 

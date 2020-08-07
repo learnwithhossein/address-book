@@ -1,8 +1,6 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -48,15 +46,8 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            try
-            {
-                var result = _repository.GetById(id);
-                return Ok(result);
-            }
-            catch (KeyNotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            var result = _repository.GetById(id);
+            return Ok(result);
         }
 
         [HttpGet("find")]

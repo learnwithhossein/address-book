@@ -9,5 +9,5 @@ export const routes: Routes = [
     { path: 'search', component: SearchComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'notfound', component: NotfoundComponent },
-    { path: '**', redirectTo: 'notfound', pathMatch: 'full' }
+    { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

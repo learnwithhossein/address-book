@@ -15,6 +15,7 @@ import { RegisterComponent } from './app/register/register.component';
 import { NotfoundComponent } from './app/notfound/notfound.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './routes';
+import { ContactEditComponent } from './app/contact-edit/contact-edit.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { routes } from './routes';
         NavbarComponent,
         SearchComponent,
         RegisterComponent,
-        NotfoundComponent
+        NotfoundComponent,
+        ContactEditComponent
     ],
     imports: [
         CommonModule,

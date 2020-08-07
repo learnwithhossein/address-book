@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Contact } from 'src/models/contact';
+import { map, catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private toastr: ToastrService) { }
+
+    private handleError(error: HttpErrorResponse) {
+        console.log(error);
+        this.toastr.error(error.error);
+        return [];
+    }
 
     private rest = {
         get: (url: string, criteria?: any) => {
@@ -19,17 +27,21 @@ export class ApiService {
                 }
             }
 
-            return this.http.get(`${environment.apiUrl}${url}${query}`);
+            return this.http.get(`${environment.apiUrl}${url}${query}`)
+                .pipe(map(data => data), catchError(error => this.handleError(error)));
         },
-        post: (url: string, body: any) => this.http.post(`${environment.apiUrl}${url}`, body),
-        put: (url: string, body: any) => this.http.put(`${environment.apiUrl}${url}`, body),
+        post: (url: string, body: any) => this.http.post(`${environment.apiUrl}${url}`, body)
+            .pipe(map(data => data), catchError(error => this.handleError(error))),
+        put: (url: string, body: any) => this.http.put(`${environment.apiUrl}${url}`, body)
+            .pipe(map(data => data), catchError(error => this.handleError(error))),
         delete: (url: string, id: number) => {
             const options = {
                 headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
                 body: id
             };
 
-            return this.http.delete(`${environment.apiUrl}${url}`, options);
+            return this.http.delete(`${environment.apiUrl}${url}`, options)
+                .pipe(map(data => data), catchError(error => this.handleError(error)));
         }
     }
 

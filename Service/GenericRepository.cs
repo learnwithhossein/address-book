@@ -1,5 +1,7 @@
 ﻿using Persist;
+using Service.Common;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Service
 {
@@ -43,7 +45,7 @@ namespace Service
             var entity = table.Find(id);
             if (entity == null)
             {
-                throw new KeyNotFoundException($"Entity with key {id} not found.");
+                throw new RestException(HttpStatusCode.NotFound, $"Entity with key {id} not found.");
             }
 
             return entity;
