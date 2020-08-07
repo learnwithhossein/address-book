@@ -9,5 +9,9 @@
         public string Email { get; set; }
         public string TellNo { get; set; }
         public string CellNo { get; set; }
+        public string JobTitle { get; set; }
+        public string WorkNo { get; set; }
+        public string WorkAddress { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

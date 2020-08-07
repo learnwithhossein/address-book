@@ -15,7 +15,6 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
         const criteria = {
-            address: '1',
             name: 'ali'
         };
 

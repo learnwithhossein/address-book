@@ -6,4 +6,8 @@ export class Contact {
     email: string;
     tellNo: string;
     cellNo: string;
+    workNo: string;
+    jobTitle: string;
+    workAddress: string;
+    imageUrl: string;
 }

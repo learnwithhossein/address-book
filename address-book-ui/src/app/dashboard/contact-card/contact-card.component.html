@@ -1,12 +1,11 @@
 <div class="card m-b-30 mt-4">
     <div class="card-body row">
         <div class="col-6">
-            <a href=""><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""
-                    class="img-fluid rounded-circle w-60"></a>
+            <a href=""><img src={{contact.imageUrl}} alt="" class="img-fluid rounded-circle w-60"></a>
         </div>
         <div class="col-6 card-title align-self-center mb-0">
             <h5>{{contact.firstName}} {{contact.lastName}}</h5>
-            <p class="m-0">Graphics Designer</p>
+            <p class="m-0 text-truncate">{{contact.jobTitle}}</p>
         </div>
     </div>
     <ul class="list-group list-group-flush">
@@ -17,6 +16,8 @@
             <i class="fa fa-phone float-right"></i>Phone : {{contact.tellNo}}
             <br>
             <i class="fa fa-mobile float-right"></i>Mobile : {{contact.cellNo}}
+            <br>
+            <i class="fa fa-phone float-right"></i>Work : {{contact.workNo}}
         </li>
     </ul>
     <div class="card-body">
