@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { FormsModule } from '@angular/forms';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
@@ -30,9 +32,11 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
     ],
     imports: [
         CommonModule,
+        FormsModule,
         BrowserAnimationsModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({ enableHtml: true }),
         ModalModule.forRoot(),
+        BsDropdownModule.forRoot(),
         RouterModule.forRoot(routes),
         BrowserModule,
         HttpClientModule

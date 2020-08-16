@@ -4,39 +4,72 @@ import { environment } from 'src/environments/environment';
 import { Contact } from 'src/models/contact';
 import { map, catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { HttpErrors } from '../constants/AddressBook';
+import { LoginCredentials } from 'src/models/LoginCredentials';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
 
+    private readonly headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+    });
+
+    private readonly options = {
+        headers: this.headers
+    };
+
     constructor(private http: HttpClient, private toastr: ToastrService) { }
+
+    private createQuery(criteria: any) {
+        let query = '?'
+        if (criteria) {
+            for (var property in criteria) {
+                query += `${property}=${criteria[property]}&`;
+            }
+        }
+
+        return query;
+    }
 
     private handleError(error: HttpErrorResponse) {
         console.log(error);
-        this.toastr.error(error.error);
+
+        let message = '';
+
+        if (error.error?.errors) {
+            const errors = error.error?.errors;
+            for (var errorItem in errors) {
+                message += `${errors[errorItem]}<br />`;
+            }
+        }
+        else {
+            message = error.error;
+        }
+
+        if (!message) {
+            message = HttpErrors.find(x => x.code === error.status)?.message;
+        }
+
+        this.toastr.error(message);
         return [];
     }
 
     private rest = {
-        get: (url: string, criteria?: any) => {
-            let query = '?'
-            if (criteria) {
-                for (var property in criteria) {
-                    query += `${property}=${criteria[property]}&`;
-                }
-            }
-
-            return this.http.get(`${environment.apiUrl}${url}${query}`)
-                .pipe(map(data => data), catchError(error => this.handleError(error)));
-        },
-        post: (url: string, body: any) => this.http.post(`${environment.apiUrl}${url}`, body)
-            .pipe(map(data => data), catchError(error => this.handleError(error))),
-        put: (url: string, body: any) => this.http.put(`${environment.apiUrl}${url}`, body)
-            .pipe(map(data => data), catchError(error => this.handleError(error))),
+        get: (url: string, criteria?: any) =>
+            this.http.get(`${environment.apiUrl}${url}${this.createQuery(criteria)}`, this.options)
+                .pipe(map(data => data), catchError(error => this.handleError(error))),
+        post: (url: string, body: any) =>
+            this.http.post(`${environment.apiUrl}${url}`, body, this.options)
+                .pipe(map(data => data), catchError(error => this.handleError(error))),
+        put: (url: string, body: any) =>
+            this.http.put(`${environment.apiUrl}${url}`, body, this.options)
+                .pipe(map(data => data), catchError(error => this.handleError(error))),
         delete: (url: string, id: number) => {
             const options = {
-                headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+                headers: this.headers,
                 body: id
             };
 
@@ -52,5 +85,9 @@ export class ApiService {
         update: (contact: Contact) => this.rest.put('contact', contact),
         getById: (id: number) => this.rest.get(`contact/` + id),
         find: (criteria: any) => this.rest.get(`contact/find`, criteria)
+    }
+
+    public auth = {
+        login: (body: LoginCredentials) => this.rest.post('auth/login', body)
     }
 }

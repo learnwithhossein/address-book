@@ -35,7 +35,8 @@ namespace Service.Auth
 
             return new LoginResult
             {
-                JwtToken = _tokenGenerator.Generate(user)
+                JwtToken = _tokenGenerator.Generate(user),
+                FirstName = user.FirstName
             };
         }
     }

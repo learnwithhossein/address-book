@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="showDashboard" class="container">
     <div class="row">
         <div class="col-3" *ngFor="let contact of contacts">
             <app-contact-card (contactDeleted)="deleteContact($event)" [contact]="contact"></app-contact-card>

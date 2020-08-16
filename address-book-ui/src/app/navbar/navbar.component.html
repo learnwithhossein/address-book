@@ -13,14 +13,27 @@
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['/search']" routerLinkActive="active">Search </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
-            </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="email" placeholder="Email">
-            <input class="form-control mr-sm-2" type="password" placeholder="Password">
+
+        <a *ngIf="!isLoggedIn()" class="nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
+
+        <form *ngIf="!isLoggedIn()" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+            <input name="email" [(ngModel)]="credentials.email" class="form-control mr-sm-2" type="email"
+                placeholder="Email">
+            <input name="password" [(ngModel)]="credentials.password" class="form-control mr-sm-2" type="password"
+                placeholder="Password">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
         </form>
+
+        <div *ngIf="isLoggedIn()" class="btn-group" dropdown>
+            <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                aria-controls="dropdown-basic">
+                Welcome <strong>{{getFirstName()}}</strong>! <span class="caret"></span>
+            </button>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li role="menuitem"><a class="dropdown-item" href="#">Profile</a></li>
+                <li role="menuitem"><a class="dropdown-item" (click)="logout()">Logout</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
