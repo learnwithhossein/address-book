@@ -18,20 +18,28 @@ export class DashboardComponent implements OnInit {
     ngOnInit(): void {
         this.auth.currentStatus.subscribe(data => {
             if (data) {
-                const criteria = {
-                    name: 'ali'
-                };
-
-                this.api.contact.find(criteria).subscribe(data => {
-                    this.contacts = data as Contact[];
-                });
-
-                this.showDashboard = true;
+                this.loadData();
             }
             else {
                 this.showDashboard = false;
             }
         });
+
+        if (this.auth.isLoggedIn()) {
+            this.loadData();
+        }
+    }
+
+    loadData = () => {
+        const criteria = {
+            name: 'ali'
+        };
+
+        this.api.contact.find(criteria).subscribe(data => {
+            this.contacts = data as Contact[];
+        });
+
+        this.showDashboard = true;
     }
 
     deleteContact = (id: number) => {

@@ -12,13 +12,13 @@ import { LoginCredentials } from 'src/models/LoginCredentials';
 })
 export class ApiService {
 
-    private readonly headers = new HttpHeaders({
+    private getHeaders = () => new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
     });
 
-    private readonly options = {
-        headers: this.headers
+    private getOptions = () => {
+        return { headers: this.getHeaders() };
     };
 
     constructor(private http: HttpClient, private toastr: ToastrService) { }
@@ -59,17 +59,17 @@ export class ApiService {
 
     private rest = {
         get: (url: string, criteria?: any) =>
-            this.http.get(`${environment.apiUrl}${url}${this.createQuery(criteria)}`, this.options)
+            this.http.get(`${environment.apiUrl}${url}${this.createQuery(criteria)}`, this.getOptions())
                 .pipe(map(data => data), catchError(error => this.handleError(error))),
         post: (url: string, body: any) =>
-            this.http.post(`${environment.apiUrl}${url}`, body, this.options)
+            this.http.post(`${environment.apiUrl}${url}`, body, this.getOptions())
                 .pipe(map(data => data), catchError(error => this.handleError(error))),
         put: (url: string, body: any) =>
-            this.http.put(`${environment.apiUrl}${url}`, body, this.options)
+            this.http.put(`${environment.apiUrl}${url}`, body, this.getOptions())
                 .pipe(map(data => data), catchError(error => this.handleError(error))),
         delete: (url: string, id: number) => {
             const options = {
-                headers: this.headers,
+                headers: this.getHeaders(),
                 body: id
             };
 
