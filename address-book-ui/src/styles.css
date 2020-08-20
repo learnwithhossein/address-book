@@ -1,10 +1,10 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 @import '../node_modules/ngx-toastr/toastr.css';
+@import '../node_modules/bootswatch/dist/minty/bootstrap.min.css';
 
 .social-links li a {
     -webkit-border-radius: 50%;
-    background-color: #007bff;
     border-radius: 50%;
     color: #fff;
     display: inline-block;

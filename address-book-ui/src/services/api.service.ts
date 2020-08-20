@@ -88,6 +88,6 @@ export class ApiService {
     }
 
     public auth = {
-        login: (body: LoginCredentials) => this.rest.post('auth/login', body)
+        login: (body: LoginCredentials) => this.rest.post('auth/loginAsync', body)
     }
 }

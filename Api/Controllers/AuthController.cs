@@ -1,6 +1,8 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Service.Auth;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -24,6 +26,20 @@ namespace Api.Controllers
         public IActionResult Login(LoginCredentials loginCredentials)
         {
             return Ok(_repository.Login(loginCredentials));
+        }
+
+        [HttpPost("loginAsync")]
+        public async Task<IActionResult> LoginAsync(LoginCredentials loginCredentials,
+            CancellationToken cancellationToken)
+        {
+            var task = new Task<IActionResult>(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Ok(_repository.Login(loginCredentials));
+            });
+            task.Start();
+
+            return await task;
         }
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoginResult } from 'src/models/LoginResult';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { LoginResult } from 'src/models/LoginResult';
 })
 export class AuthService {
 
+    private subscription: Subscription;
     private behaviour = new BehaviorSubject(false);
     currentStatus = this.behaviour.asObservable();
 
@@ -18,7 +19,11 @@ export class AuthService {
     }
 
     login = (credentials) => {
-        this.api.auth.login(credentials)
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+
+        this.subscription = this.api.auth.login(credentials)
             .subscribe((result: LoginResult) => {
                 localStorage.setItem('jwtToken', result.jwtToken);
                 localStorage.setItem('firstName', result.firstName);
