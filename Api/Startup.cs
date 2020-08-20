@@ -1,17 +1,8 @@
-using System.Net;
-using System.Text;
-using Domain;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Api.Common;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Persist;
 using Service.Auth;
 using Service.Common;
@@ -32,7 +23,8 @@ namespace Api
         {
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
             });
 
             services.AddScoped<ContactRepository, ContactRepository>();
@@ -49,50 +41,16 @@ namespace Api
                 });
             });
 
-            services.AddIdentityCore<User>()
-                .AddUserManager<UserManager<User>>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddEntityFrameworkStores<DataContext>();
-
-            var secret = Configuration.GetSection("Secret").Value;
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = key,
-                        ValidateAudience = false,
-                        ValidateIssuer = false
-                    };
-                });
+            services.AddSecurity(Configuration);
 
             services.AddControllers();
+
+            services.AddSwagger();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseExceptionHandler(builder =>
-            {
-                builder.Run(async context =>
-                {
-                    var feature = context.Features.Get<IExceptionHandlerFeature>();
-                    var error = feature.Error;
-
-                    var statusCode = error is RestException restException
-                        ? restException.StatusCode
-                        : HttpStatusCode.InternalServerError;
-
-                    context.Response.StatusCode = (int) statusCode;
-                    var message = statusCode == HttpStatusCode.InternalServerError
-                        ? "An error occured in server, please try later."
-                        : error.Message;
-                    await context.Response.WriteAsync(message);
-                });
-            });
+            app.UseUnhandledExceptionHandler();
 
             app.UseRouting();
 
@@ -105,6 +63,12 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             });
         }
     }

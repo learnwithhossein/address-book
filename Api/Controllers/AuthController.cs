@@ -15,6 +15,11 @@ namespace Api.Controllers
             _repository = repository;
         }
 
+        /// <summary>
+        /// This method is responsible for login the user to the application.
+        /// </summary>
+        /// <param name="loginCredentials">The user's credentials including an email and password</param>
+        /// <returns>If login is successful, it will return a valid JWT token. Otherwise, it will throw a 400/401 error.</returns>
         [HttpPost("login")]
         public IActionResult Login(LoginCredentials loginCredentials)
         {
