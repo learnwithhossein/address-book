@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Service.Common;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Service.Auth
 {
@@ -19,15 +20,15 @@ namespace Service.Auth
             _tokenGenerator = tokenGenerator;
         }
 
-        public LoginResult Login(LoginCredentials loginCredentials)
+        public async Task<LoginResult> LoginAsync(LoginCredentials loginCredentials)
         {
-            var user = _userManager.FindByEmailAsync(loginCredentials.Email).Result;
+            var user = await _userManager.FindByEmailAsync(loginCredentials.Email);
             if (user == null)
             {
                 throw new RestException(HttpStatusCode.NotFound, $"Email address {loginCredentials.Email} not found.");
             }
 
-            var result = _signInManager.CheckPasswordSignInAsync(user, loginCredentials.Password, false).Result;
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginCredentials.Password, false);
             if (!result.Succeeded)
             {
                 throw new RestException(HttpStatusCode.BadRequest, "Email/Password is invalid.");

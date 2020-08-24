@@ -4,12 +4,11 @@
         <name>Api</name>
     </assembly>
     <members>
-        <member name="M:Api.Controllers.AuthController.LoginAsync(Domain.LoginCredentials,System.Threading.CancellationToken)">
+        <member name="M:Api.Controllers.AuthController.LoginAsync(Domain.LoginCredentials)">
             <summary>
             This method is responsible for login the user to the application.
             </summary>
             <param name="loginCredentials">The user's credentials including an email and password</param>
-            <param name="cancellationToken">Cancels current task.</param>
             <returns>If login is successful, it will return a valid JWT token. Otherwise, it will throw a 400/401 error.</returns>
         </member>
     </members>
