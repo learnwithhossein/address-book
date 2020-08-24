@@ -21,14 +21,9 @@ namespace Api.Controllers
         /// This method is responsible for login the user to the application.
         /// </summary>
         /// <param name="loginCredentials">The user's credentials including an email and password</param>
+        /// <param name="cancellationToken">Cancels current task.</param>
         /// <returns>If login is successful, it will return a valid JWT token. Otherwise, it will throw a 400/401 error.</returns>
         [HttpPost("login")]
-        public IActionResult Login(LoginCredentials loginCredentials)
-        {
-            return Ok(_repository.Login(loginCredentials));
-        }
-
-        [HttpPost("loginAsync")]
         public async Task<IActionResult> LoginAsync(LoginCredentials loginCredentials,
             CancellationToken cancellationToken)
         {

@@ -9,8 +9,12 @@ import { LoginResult } from 'src/models/LoginResult';
 export class AuthService {
 
     private subscription: Subscription;
+
     private behaviour = new BehaviorSubject(false);
     currentStatus = this.behaviour.asObservable();
+
+    private loadinBehaviour = new BehaviorSubject(false);
+    loadingStatus = this.loadinBehaviour.asObservable();
 
     constructor(private api: ApiService) { }
 
@@ -18,10 +22,16 @@ export class AuthService {
         this.behaviour.next(status)
     }
 
+    changeLoadingStatus(status: boolean) {
+        this.loadinBehaviour.next(status)
+    }
+
     login = (credentials) => {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
+
+        this.changeLoadingStatus(true);
 
         this.subscription = this.api.auth.login(credentials)
             .subscribe((result: LoginResult) => {
@@ -29,6 +39,8 @@ export class AuthService {
                 localStorage.setItem('firstName', result.firstName);
 
                 this.changeLoginStatus(true);
+
+                this.changeLoadingStatus(false);
             });
     }
 
