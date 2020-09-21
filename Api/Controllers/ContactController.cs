@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -18,44 +19,44 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = _repository.GetAll();
+            var result = await _repository.GetAll();
             return Ok(result);
         }
 
         [HttpPost]
-        public IActionResult Create(Contact contact)
+        public async Task<IActionResult> Create(Contact contact)
         {
-            _repository.Add(contact);
+            await _repository.Add(contact);
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] int id)
+        public async Task<IActionResult> Delete([FromBody] int id)
         {
-            _repository.Delete(id);
+            await _repository.Delete(id);
             return Ok();
         }
 
         [HttpPut]
-        public IActionResult Update(Contact contact)
+        public async Task<IActionResult> Update(Contact contact)
         {
-            _repository.Update(contact);
+            await _repository.Update(contact);
             return Ok();
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var result = _repository.GetById(id);
+            var result = await _repository.GetById(id);
             return Ok(result);
         }
 
         [HttpGet("find")]
-        public IActionResult Find([FromQuery] string name, [FromQuery] string phone, [FromQuery] string address)
+        public async Task<IActionResult> Find([FromQuery] string name, [FromQuery] string phone, [FromQuery] string address)
         {
-            var result = _repository.Find(name, phone, address);
+            var result = await _repository.Find(name, phone, address);
             return Ok(result);
         }
     }

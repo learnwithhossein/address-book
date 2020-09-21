@@ -41,6 +41,8 @@ export class AuthService {
                 this.changeLoginStatus(true);
 
                 this.changeLoadingStatus(false);
+            }, () => {
+                this.changeLoadingStatus(false);
             });
     }
 

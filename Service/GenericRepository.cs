@@ -1,7 +1,9 @@
-﻿using Persist;
+﻿using Microsoft.EntityFrameworkCore;
+using Persist;
 using Service.Common;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Service
 {
@@ -14,35 +16,35 @@ namespace Service
             Context = context;
         }
 
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            Context.Add(entity);
-            Context.SaveChanges();
+            await Context.AddAsync(entity);
+            await Context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             var table = Context.Set<T>();
-            var entity = table.Find(id);
+            var entity = await table.FindAsync(id);
 
             Context.Remove(entity);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
-        public virtual void Update(T newEntity)
+        public virtual async Task Update(T newEntity)
         {
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return Context.Set<T>();
+            return await Context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
             var table = Context.Set<T>();
-            var entity = table.Find(id);
+            var entity = await table.FindAsync(id);
             if (entity == null)
             {
                 throw new RestException(HttpStatusCode.NotFound, $"Entity with key {id} not found.");

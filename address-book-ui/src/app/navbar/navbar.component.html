@@ -15,7 +15,8 @@
             </li>
         </ul>
 
-        <a *ngIf="!isLoggedIn()" class="nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
+        <a *ngIf="!isLoggedIn()" class="nav-link text-light" [routerLink]="['/register']"
+            routerLinkActive="active">Register</a>
 
         <form *ngIf="!isLoggedIn()" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
             <input name="email" [(ngModel)]="credentials.email" class="form-control mr-sm-2" type="email"

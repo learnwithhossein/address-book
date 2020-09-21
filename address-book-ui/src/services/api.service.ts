@@ -6,6 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrors } from '../constants/AddressBook';
 import { LoginCredentials } from 'src/models/LoginCredentials';
+import { throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -54,7 +55,8 @@ export class ApiService {
         }
 
         this.toastr.error(message);
-        return [];
+
+        return throwError(error);
     }
 
     private rest = {
@@ -88,6 +90,6 @@ export class ApiService {
     }
 
     public auth = {
-        login: (body: LoginCredentials) => this.rest.post('auth/loginAsync', body)
+        login: (body: LoginCredentials) => this.rest.post('auth/login', body)
     }
 }

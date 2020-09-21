@@ -1,7 +1,9 @@
 ﻿using Domain;
+using Microsoft.EntityFrameworkCore;
 using Persist;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Service.Contacts
 {
@@ -11,10 +13,10 @@ namespace Service.Contacts
         {
         }
 
-        public override void Update(Contact newEntity)
+        public override async Task Update(Contact newEntity)
         {
             var table = Context.Set<Contact>();
-            var oldEntity = table.Find(newEntity.Id);
+            var oldEntity = await table.FindAsync(newEntity.Id);
 
             oldEntity.Address = newEntity.Address;
             oldEntity.CellNo = newEntity.CellNo;
@@ -23,10 +25,10 @@ namespace Service.Contacts
             oldEntity.LastName = newEntity.LastName;
             oldEntity.TellNo = newEntity.TellNo;
 
-            base.Update(newEntity);
+            await base.Update(newEntity);
         }
 
-        public IEnumerable<Contact> Find(string name, string phone, string address)
+        public async Task<IEnumerable<Contact>> Find(string name, string phone, string address)
         {
             var table = Context.Set<Contact>()
                 .AsQueryable();
@@ -47,7 +49,7 @@ namespace Service.Contacts
                 table = table.Where(x => x.Address.ToLower().Contains(address.ToLower()));
             }
 
-            return table;
+            return await table.ToListAsync();
         }
     }
 }
