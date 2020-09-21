@@ -9,3 +9,8 @@
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-zig-zag" [fullScreen]="true">
     <p style="color: white"> Wait please... </p>
 </ngx-spinner>
+
+<div *ngIf="pagination" class="d-flex justify-content-center mt-2">
+    <pagination [(ngModel)]="pagination.pageNumber" [itemsPerPage]="pagination.pageSize" [boundaryLinks]="true"
+        (pageChanged)="pageChanged($event)" [maxSize]="5" [totalItems]="pagination.totalCount"></pagination>
+</div>

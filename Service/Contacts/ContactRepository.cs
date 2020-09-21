@@ -1,7 +1,6 @@
 ﻿using Domain;
-using Microsoft.EntityFrameworkCore;
 using Persist;
-using System.Collections.Generic;
+using Service.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,7 +27,8 @@ namespace Service.Contacts
             await base.Update(newEntity);
         }
 
-        public async Task<IEnumerable<Contact>> Find(string name, string phone, string address)
+        public async Task<PagedList<Contact>> Find(string name, string phone, string address, int pageNumber,
+            int pageSize)
         {
             var table = Context.Set<Contact>()
                 .AsQueryable();
@@ -49,7 +49,7 @@ namespace Service.Contacts
                 table = table.Where(x => x.Address.ToLower().Contains(address.ToLower()));
             }
 
-            return await table.ToListAsync();
+            return await PagedList<Contact>.Create(table, pageNumber, pageSize);
         }
     }
 }

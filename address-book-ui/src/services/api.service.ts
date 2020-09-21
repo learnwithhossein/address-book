@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrors } from '../constants/AddressBook';
 import { LoginCredentials } from 'src/models/LoginCredentials';
 import { throwError } from 'rxjs';
+import { PagedResult } from 'src/models/PagedResult';
 
 @Injectable({
     providedIn: 'root'
@@ -63,6 +64,19 @@ export class ApiService {
         get: (url: string, criteria?: any) =>
             this.http.get(`${environment.apiUrl}${url}${this.createQuery(criteria)}`, this.getOptions())
                 .pipe(map(data => data), catchError(error => this.handleError(error))),
+        getPaged: <T>(url: string, criteria?: any) =>
+            this.http.get(`${environment.apiUrl}${url}${this.createQuery(criteria)}`,
+                { headers: this.getHeaders(), observe: 'response' })
+                .pipe(map(data => {
+                    const result = new PagedResult();
+                    result.body = data.body;
+
+                    if (data.headers.get('Pagination')) {
+                        result.pagination = JSON.parse(data.headers.get('Pagination'));
+                    }
+
+                    return result;
+                }), catchError(error => this.handleError(error))),
         post: (url: string, body: any) =>
             this.http.post(`${environment.apiUrl}${url}`, body, this.getOptions())
                 .pipe(map(data => data), catchError(error => this.handleError(error))),
@@ -86,7 +100,7 @@ export class ApiService {
         delete: (id: number) => this.rest.delete('contact', id),
         update: (contact: Contact) => this.rest.put('contact', contact),
         getById: (id: number) => this.rest.get(`contact/` + id),
-        find: (criteria: any) => this.rest.get(`contact/find`, criteria)
+        find: (criteria: any) => this.rest.getPaged(`contact/find`, criteria)
     }
 
     public auth = {

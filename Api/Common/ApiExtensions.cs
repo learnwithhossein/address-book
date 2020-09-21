@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Persist;
 using Service.Common;
 
@@ -34,7 +36,7 @@ namespace Api.Common
                         ? restException.StatusCode
                         : HttpStatusCode.InternalServerError;
 
-                    context.Response.StatusCode = (int)statusCode;
+                    context.Response.StatusCode = (int) statusCode;
                     var message = statusCode == HttpStatusCode.InternalServerError
                         ? "An error occured in server, please try later."
                         : error.Message;
@@ -112,6 +114,17 @@ namespace Api.Common
             });
 
             return services;
+        }
+
+        public static void AddPagination(this HttpResponse response, Pagination pagination)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            response.Headers.Add("Pagination", JsonConvert.SerializeObject(pagination, settings));
+            response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
     }
 }

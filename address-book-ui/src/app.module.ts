@@ -8,6 +8,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
@@ -38,6 +39,7 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
         ToastrModule.forRoot({ enableHtml: true }),
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
+        PaginationModule.forRoot(),
         RouterModule.forRoot(routes),
         BrowserModule,
         NgxSpinnerModule,
