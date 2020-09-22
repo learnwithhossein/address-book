@@ -10,6 +10,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
@@ -43,6 +44,7 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
         PaginationModule.forRoot(),
         ButtonsModule.forRoot(),
         RouterModule.forRoot(routes),
+        AgGridModule.withComponents([]),
         BrowserModule,
         NgxSpinnerModule,
         HttpClientModule

@@ -64,5 +64,13 @@ namespace Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string name)
+        {
+            var result = await _repository.Search(name);
+
+            return Ok(result);
+        }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Domain;
+﻿using System.Collections.Generic;
+using Domain;
 using Persist;
 using Service.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Service.Contacts
 {
@@ -55,6 +57,20 @@ namespace Service.Contacts
             table = sort == "asc" ? table.OrderBy(orderBy) : table.OrderByDescending(orderBy);
 
             return await PagedList<Contact>.Create(table, pageNumber, pageSize);
+        }
+
+        public async Task<IEnumerable<Contact>> Search(string name)
+        {
+            var table = Context.Set<Contact>()
+                .AsQueryable();
+
+            if (name != null)
+            {
+                table = table.Where(x =>
+                    x.FirstName.ToLower().Contains(name.ToLower()) || x.LastName.ToLower().Contains(name.ToLower()));
+            }
+
+            return await table.ToListAsync();
         }
     }
 }
