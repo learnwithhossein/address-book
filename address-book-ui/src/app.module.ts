@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
@@ -40,6 +41,7 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
         PaginationModule.forRoot(),
+        ButtonsModule.forRoot(),
         RouterModule.forRoot(routes),
         BrowserModule,
         NgxSpinnerModule,

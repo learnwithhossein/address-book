@@ -12,9 +12,12 @@ import { Pagination } from 'src/models/Pagination';
 })
 export class DashboardComponent implements OnInit {
 
+    radioModel = "8";
     contacts: Contact[];
     showDashboard = false;
     pagination: Pagination;
+    orderBy = 'FirstName';
+    sort = 'asc';
 
     constructor(
         private api: ApiService,
@@ -29,7 +32,7 @@ export class DashboardComponent implements OnInit {
             else {
                 this.spinner.hide();
             }
-        })
+        });
 
         this.auth.currentStatus.subscribe(data => {
             if (data) {
@@ -55,7 +58,11 @@ export class DashboardComponent implements OnInit {
     }
 
     loadData = () => {
-        const criteria = { ...this.pagination };
+        const criteria = {
+            ...this.pagination,
+            orderBy: this.orderBy,
+            sort: this.sort
+        };
 
         this.api.contact.find(criteria).subscribe(data => {
             this.contacts = data.body as Contact[];
@@ -69,4 +76,21 @@ export class DashboardComponent implements OnInit {
         const index = this.contacts.findIndex(x => x.id === id);
         this.contacts.splice(index, 1);
     }
+
+    pageSizeChange = () => {
+        this.pagination.pageSize = +this.radioModel;
+
+        this.loadData();
+    }
+
+    changeOrderBy = (propertyName) => {
+        this.orderBy = propertyName;
+
+        this.loadData();
+    }
+
+    changeSort = () => {
+        this.loadData();
+    }
+
 }

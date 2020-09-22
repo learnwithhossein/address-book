@@ -28,7 +28,7 @@ namespace Service.Contacts
         }
 
         public async Task<PagedList<Contact>> Find(string name, string phone, string address, int pageNumber,
-            int pageSize)
+            int pageSize, string orderBy, string sort)
         {
             var table = Context.Set<Contact>()
                 .AsQueryable();
@@ -48,6 +48,11 @@ namespace Service.Contacts
             {
                 table = table.Where(x => x.Address.ToLower().Contains(address.ToLower()));
             }
+
+            orderBy ??= "Id";
+            sort ??= "asc";
+
+            table = sort == "asc" ? table.OrderBy(orderBy) : table.OrderByDescending(orderBy);
 
             return await PagedList<Contact>.Create(table, pageNumber, pageSize);
         }

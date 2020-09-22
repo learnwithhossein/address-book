@@ -1,10 +1,9 @@
-﻿using Domain;
+﻿using Api.Common;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
 using System.Threading.Tasks;
-using Api.Common;
-using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
@@ -57,9 +56,10 @@ namespace Api.Controllers
 
         [HttpGet("find")]
         public async Task<IActionResult> Find([FromQuery] string name, [FromQuery] string phone,
-            [FromQuery] string address, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+            [FromQuery] string address, [FromQuery] int pageNumber, [FromQuery] int pageSize,
+            [FromQuery] string orderBy, [FromQuery] string sort)
         {
-            var result = await _repository.Find(name, phone, address, pageNumber, pageSize);
+            var result = await _repository.Find(name, phone, address, pageNumber, pageSize, orderBy, sort);
             Response.AddPagination(result.Pagination);
 
             return Ok(result);
