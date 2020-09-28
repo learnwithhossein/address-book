@@ -7,6 +7,10 @@ using Persist;
 using System;
 using Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
 
 namespace Api
 {
@@ -14,6 +18,20 @@ namespace Api
     {
         public static void Main(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(Environment.CurrentDirectory + @"\appsettings.json")
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.MSSqlServer(configuration.GetConnectionString("SqlServerConnection"),
+                    new SinkOptions
+                    {
+                        AutoCreateSqlTable = true,
+                        TableName = "Logs"
+                    }, restrictedToMinimumLevel: LogEventLevel.Error)
+                .CreateLogger();
+
             var host = CreateHostBuilder(args).Build();
 
             MigrateDatabase(host);
@@ -43,6 +61,7 @@ namespace Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
