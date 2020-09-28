@@ -10,7 +10,7 @@
     <p style="color: white"> Wait please... </p>
 </ngx-spinner>
 
-<div *ngIf="pagination" class="d-flex justify-content-center mt-2">
+<div *ngIf="pagination && showDashboard" class="d-flex justify-content-center mt-2">
     <pagination [(ngModel)]="pagination.pageNumber" [itemsPerPage]="pagination.pageSize" [boundaryLinks]="true"
         (pageChanged)="pageChanged($event)" [maxSize]="5" [totalItems]="pagination.totalCount"></pagination>
 

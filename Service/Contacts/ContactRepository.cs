@@ -25,6 +25,10 @@ namespace Service.Contacts
             oldEntity.FirstName = newEntity.FirstName;
             oldEntity.LastName = newEntity.LastName;
             oldEntity.TellNo = newEntity.TellNo;
+            oldEntity.WorkNo = newEntity.WorkNo;
+            oldEntity.ImageUrl = newEntity.ImageUrl;
+            oldEntity.WorkAddress = newEntity.WorkAddress;
+            oldEntity.JobTitle = newEntity.JobTitle;
 
             await base.Update(newEntity);
         }

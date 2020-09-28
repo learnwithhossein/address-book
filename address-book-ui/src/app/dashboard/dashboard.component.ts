@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
     pagination: Pagination;
     orderBy = 'FirstName';
     sort = 'asc';
+    criteria;
 
     constructor(
         private api: ApiService,
@@ -25,6 +26,24 @@ export class DashboardComponent implements OnInit {
         private spinner: NgxSpinnerService) { }
 
     ngOnInit(): void {
+        const criteriaString = localStorage.getItem('criteria');
+        if (criteriaString) {
+            this.criteria = JSON.parse(localStorage.getItem('criteria'));
+            this.sort = this.criteria.sort;
+            this.orderBy = this.criteria.orderBy;
+            this.pagination = new Pagination;
+            this.pagination.pageNumber = this.criteria.pageNumber;
+            this.pagination.pageSize = this.criteria.pageSize;
+            this.pagination.totalCount = this.criteria.totalCount;
+            this.radioModel = this.pagination.pageSize.toString();
+        } else {
+            this.criteria = {
+                ...this.pagination,
+                sort: this.sort,
+                orderBy: this.orderBy
+            }
+        }
+
         this.auth.loadingStatus.subscribe(data => {
             if (data) {
                 this.spinner.show();
@@ -54,17 +73,19 @@ export class DashboardComponent implements OnInit {
         this.pagination.pageNumber = page;
         this.pagination.pageSize = itemsPerPage;
 
+        this.criteria = {
+            ...this.pagination,
+            sort: this.sort,
+            orderBy: this.orderBy
+        };
+
         this.loadData();
     }
 
     loadData = () => {
-        const criteria = {
-            ...this.pagination,
-            orderBy: this.orderBy,
-            sort: this.sort
-        };
+        localStorage.setItem('criteria', JSON.stringify(this.criteria));
 
-        this.api.contact.find(criteria).subscribe(data => {
+        this.api.contact.find(this.criteria).subscribe(data => {
             this.contacts = data.body as Contact[];
             this.pagination = data.pagination;
         });
@@ -80,16 +101,34 @@ export class DashboardComponent implements OnInit {
     pageSizeChange = () => {
         this.pagination.pageSize = +this.radioModel;
 
+        this.criteria = {
+            ...this.pagination,
+            sort: this.sort,
+            orderBy: this.orderBy
+        };
+
         this.loadData();
     }
 
     changeOrderBy = (propertyName) => {
         this.orderBy = propertyName;
 
+        this.criteria = {
+            ...this.pagination,
+            sort: this.sort,
+            orderBy: this.orderBy
+        };
+
         this.loadData();
     }
 
     changeSort = () => {
+        this.criteria = {
+            ...this.pagination,
+            sort: this.sort,
+            orderBy: this.orderBy
+        };
+
         this.loadData();
     }
 
