@@ -18,7 +18,8 @@ namespace Persist
                     UserName = "admin@test.com",
                     Email = "admin@test.com",
                     FirstName = "Farhan",
-                    LastName = "Original"
+                    LastName = "Original",
+                    EmailConfirmed = true
                 };
 
                 userManager.CreateAsync(user, "P@$$w0rd").Wait();

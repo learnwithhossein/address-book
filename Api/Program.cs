@@ -18,18 +18,19 @@ namespace Api
     {
         public static void Main(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile(Environment.CurrentDirectory + @"\appsettings.json")
-                .Build();
+            // var configuration = new ConfigurationBuilder()
+            //     .AddJsonFile(Environment.CurrentDirectory + @"\appsettings.json")
+            //     .Build();
 
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
                 .WriteTo.Console()
-                .WriteTo.MSSqlServer(configuration.GetConnectionString("SqlServerConnection"),
-                    new SinkOptions
-                    {
-                        AutoCreateSqlTable = true,
-                        TableName = "Logs"
-                    }, restrictedToMinimumLevel: LogEventLevel.Error)
+                // .WriteTo.MSSqlServer(configuration.GetConnectionString("SqlServerConnection"),
+                //     new SinkOptions
+                //     {
+                //         AutoCreateSqlTable = true,
+                //         TableName = "Logs"
+                //     }, restrictedToMinimumLevel: LogEventLevel.Error)
                 .CreateLogger();
 
             var host = CreateHostBuilder(args).Build();

@@ -37,8 +37,6 @@ export class ApiService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        console.log(error);
-
         let message = '';
 
         if (error.error?.errors) {
@@ -105,6 +103,8 @@ export class ApiService {
     }
 
     public auth = {
-        login: (body: LoginCredentials) => this.rest.post('auth/login', body)
+        login: (body: LoginCredentials) => this.rest.post('auth/login', body),
+        register: (body) => this.rest.post('auth/register', body),
+        confirm: (body) => this.rest.post('auth/confirm', body),
     }
 }

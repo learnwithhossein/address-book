@@ -19,10 +19,8 @@ export class ContactEditComponent implements OnInit {
 
     ngOnInit(): void {
         const id = +this.route.snapshot.paramMap.get('id');
-        console.log(id)
         this.api.contact.getById(id).subscribe(data => {
             this.contact = data as Contact;
-            console.log(this.contact);
         });
     }
 

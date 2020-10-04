@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Service.Auth;
 using System.Threading.Tasks;
@@ -25,6 +26,18 @@ namespace Api.Controllers
         public async Task<IActionResult> LoginAsync(LoginCredentials loginCredentials)
         {
             return Ok(await _repository.LoginAsync(loginCredentials));
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserForRegisterDto user)
+        {
+            return Ok(await _repository.Register(user));
+        }
+
+        [HttpPost("confirm")]
+        public async Task<IActionResult> Confirm(UserForConfirmationDto user)
+        {
+            return Ok(await _repository.Confirm(user));
         }
     }
 }
