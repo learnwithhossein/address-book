@@ -6,11 +6,12 @@ import { NotfoundComponent } from './app/notfound/notfound.component';
 import { ContactEditComponent } from './app/contact-edit/contact-edit.component';
 import { RegisterSuccessfulComponent } from './app/register/register-successful/register-successful.component';
 import { RegisterConfirmedComponent } from './app/register/register-confirmed/register-confirmed.component';
+import { RoutesGuard } from './routes.guard';
 
 export const routes: Routes = [
     { path: 'home', component: DashboardComponent },
-    { path: 'search', component: SearchComponent },
-    { path: 'edit/:id', component: ContactEditComponent },
+    { path: 'search', component: SearchComponent, canActivate: [RoutesGuard] },
+    { path: 'edit/:id', component: ContactEditComponent, canActivate: [RoutesGuard] },
     { path: 'register', component: RegisterComponent },
     { path: 'register-successful', component: RegisterSuccessfulComponent },
     { path: 'register-confirmed/:id', component: RegisterConfirmedComponent },

@@ -55,7 +55,19 @@ export class AuthService {
 
     getFirstName = () => localStorage.getItem('firstName');
 
-    isLoggedIn = () => localStorage.getItem('jwtToken');
+    isLoggedIn = () => {
+        const token = this.getToken();
+        if (!token) {
+            return false;
+        }
+
+        const { exp } = this.parseJwt(token);
+        const now = Date.now() / 1000;
+
+        return now < exp;
+    };
+
+    getToken = () => localStorage.getItem('jwtToken');
 
     register = (user) => {
         this.api.auth.register(user)
@@ -66,4 +78,14 @@ export class AuthService {
     }
 
     confirm = (id) => this.api.auth.confirm({ id });
+
+    private parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    };
 }

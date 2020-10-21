@@ -1,13 +1,17 @@
-﻿using Domain;
+﻿using AutoMapper;
+using Domain;
 using Domain.DTO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Persist;
 using Service.Common;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Service.Auth
@@ -18,14 +22,18 @@ namespace Service.Auth
         private readonly SignInManager<User> _signInManager;
         private readonly TokenGenerator _tokenGenerator;
         private readonly IConfiguration _configuration;
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
         public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager,
-            TokenGenerator tokenGenerator, IConfiguration configuration)
+            TokenGenerator tokenGenerator, IConfiguration configuration, DataContext dataContext, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenGenerator = tokenGenerator;
             _configuration = configuration;
+            _dataContext = dataContext;
+           _mapper = mapper;
         }
 
         public async Task<LoginResult> LoginAsync(LoginCredentials loginCredentials)
@@ -52,6 +60,17 @@ namespace Service.Auth
                 JwtToken = _tokenGenerator.Generate(user),
                 FirstName = user.FirstName
             };
+        }
+
+        public async Task<UserToGetDto> Get(string id)
+        {
+            var user = await _dataContext.Users.Include(x => x.Contacts).SingleOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                throw new RestException(HttpStatusCode.NotFound, $"User Id {id} not found.");
+            }
+
+            return _mapper.Map<UserToGetDto>(user);
         }
 
         public async Task<UserToReturnInConfirmationDto> Confirm(UserForConfirmationDto userForConfirmation)

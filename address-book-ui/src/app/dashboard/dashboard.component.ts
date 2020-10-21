@@ -26,14 +26,15 @@ export class DashboardComponent implements OnInit {
         private spinner: NgxSpinnerService) { }
 
     ngOnInit(): void {
+        debugger;
         const criteriaString = localStorage.getItem('criteria');
         if (criteriaString) {
             this.criteria = JSON.parse(localStorage.getItem('criteria'));
             this.sort = this.criteria.sort;
             this.orderBy = this.criteria.orderBy;
             this.pagination = new Pagination;
-            this.pagination.pageNumber = this.criteria.pageNumber;
-            this.pagination.pageSize = this.criteria.pageSize;
+            this.pagination.pageNumber = this.criteria.pageNumber || 1;
+            this.pagination.pageSize = this.criteria.pageSize || 8;
             this.pagination.totalCount = this.criteria.totalCount;
             this.radioModel = this.pagination.pageSize.toString();
         } else {

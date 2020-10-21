@@ -23,7 +23,8 @@ namespace Service.Common
             var claims = new List<Claim>
             {
                 new Claim("full_name", $"{user.FirstName} {user.LastName}"),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("id", user.Id)
             };
 
             var secret = _configuration.GetSection("Secret").Value;

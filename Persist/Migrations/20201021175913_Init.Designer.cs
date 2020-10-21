@@ -9,7 +9,7 @@ using Persist;
 namespace Persist.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201004174003_Init")]
+    [Migration("20201021175913_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace Persist.Migrations
                     b.Property<string>("TellNo")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkAddress")
                         .HasColumnType("TEXT");
 
@@ -57,6 +60,8 @@ namespace Persist.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contacts");
                 });
@@ -260,6 +265,13 @@ namespace Persist.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Contact", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Contacts")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

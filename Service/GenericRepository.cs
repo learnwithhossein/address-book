@@ -41,7 +41,7 @@ namespace Service
             return await Context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
             var table = Context.Set<T>();
             var entity = await table.FindAsync(id);

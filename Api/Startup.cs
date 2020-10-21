@@ -1,4 +1,5 @@
 using Api.Common;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Persist;
 using Service.Auth;
 using Service.Common;
 using Service.Contacts;
+using System.Reflection;
 
 namespace Api
 {
@@ -27,9 +29,12 @@ namespace Api
                 //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
             });
 
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
+
             services.AddScoped<ContactRepository, ContactRepository>();
             services.AddScoped<AuthRepository, AuthRepository>();
             services.AddScoped<TokenGenerator, TokenGenerator>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             services.AddCors(options =>
             {

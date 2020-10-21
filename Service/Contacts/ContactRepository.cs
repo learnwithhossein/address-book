@@ -1,17 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
 using Domain;
+using Domain.DTO;
+using Microsoft.EntityFrameworkCore;
 using Persist;
 using Service.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Service.Contacts
 {
     public class ContactRepository : GenericRepository<Contact>
     {
-        public ContactRepository(DataContext context) : base(context)
+        private readonly IMapper _mapper;
+        private readonly IUserAccessor _userAccessor;
+
+        public ContactRepository(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context)
         {
+            _mapper = mapper;
+            _userAccessor = userAccessor;
         }
 
         public override async Task Update(Contact newEntity)
@@ -33,11 +40,15 @@ namespace Service.Contacts
             await base.Update(newEntity);
         }
 
-        public async Task<PagedList<Contact>> Find(string name, string phone, string address, int pageNumber,
+        public async Task<PagedList<ContactToGetDto>> Find(string name, string phone, string address, int pageNumber,
             int pageSize, string orderBy, string sort)
         {
-            var table = Context.Set<Contact>()
+            var user = await _userAccessor.GetUser();
+
+            var table = Context.Contacts.Include(x => x.User)
                 .AsQueryable();
+
+            table = table.Where(x => x.UserId == user.Id);
 
             if (name != null)
             {
@@ -60,13 +71,20 @@ namespace Service.Contacts
 
             table = sort == "asc" ? table.OrderBy(orderBy) : table.OrderByDescending(orderBy);
 
-            return await PagedList<Contact>.Create(table, pageNumber, pageSize);
+            var data = table.Select(x => _mapper.Map<ContactToGetDto>(x))
+                .AsQueryable();
+
+            return await PagedList<ContactToGetDto>.Create(data, pageNumber, pageSize);
         }
 
-        public async Task<IEnumerable<Contact>> Search(string name)
+        public async Task<IEnumerable<ContactToGetDto>> Search(string name)
         {
-            var table = Context.Set<Contact>()
+            var user = await _userAccessor.GetUser();
+
+            var table = Context.Contacts.Include(x=>x.User)
                 .AsQueryable();
+
+            table = table.Where(x => x.UserId == user.Id);
 
             if (name != null)
             {
@@ -74,7 +92,21 @@ namespace Service.Contacts
                     x.FirstName.ToLower().Contains(name.ToLower()) || x.LastName.ToLower().Contains(name.ToLower()));
             }
 
-            return await table.ToListAsync();
+            var data = table.Select(x => _mapper.Map<ContactToGetDto>(x));
+
+            return await data.ToListAsync();
+        }
+
+        public async Task<ContactToGetDto> GetDtoById(int id)
+        {
+            var contact = await Context.Contacts.Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            if (contact == null)
+            {
+                throw new RestException(System.Net.HttpStatusCode.NotFound, $"Contact with Id {id} not found.");
+            }
+
+            return _mapper.Map<ContactToGetDto>(contact);
         }
     }
 }

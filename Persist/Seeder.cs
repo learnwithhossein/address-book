@@ -32,6 +32,12 @@ namespace Persist
                 var contacts = JsonSerializer.Deserialize<IEnumerable<Contact>>(text,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+                var admin = userManager.FindByEmailAsync("admin@test.com").Result;
+                foreach (var contact in contacts)
+                {
+                    contact.UserId = admin.Id;
+                }
+
                 context.Contacts.AddRange(contacts);
                 context.SaveChanges();
             }

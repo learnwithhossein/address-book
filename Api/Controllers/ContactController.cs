@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using System.Net;
-using Api.Common;
+﻿using Api.Common;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
 using System.Threading.Tasks;
-using Service.Common;
 
 namespace Api.Controllers
 {
@@ -53,7 +50,7 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _repository.GetById(id);
+            var result = await _repository.GetDtoById(id);
             return Ok(result);
         }
 

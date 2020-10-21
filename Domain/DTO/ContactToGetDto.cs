@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Domain
+﻿namespace Domain.DTO
 {
-    public class Contact
+    public class ContactToGetDto
     {
         public int Id { get; set; }
-        [Required]
         public string FirstName { get; set; }
-        [Required]
         public string LastName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
@@ -17,7 +13,6 @@ namespace Domain
         public string WorkNo { get; set; }
         public string WorkAddress { get; set; }
         public string ImageUrl { get; set; }
-        public string UserId { get; set; }
-        public User User { get; set; }
+        public string UserFullName { get; set; }
     }
 }

@@ -39,5 +39,11 @@ namespace Api.Controllers
         {
             return Ok(await _repository.Confirm(user));
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            return Ok(await _repository.Get(id));
+        }
     }
 }
