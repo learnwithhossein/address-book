@@ -35,6 +35,9 @@ namespace Api
             services.AddScoped<AuthRepository, AuthRepository>();
             services.AddScoped<TokenGenerator, TokenGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IMessageHub, MessageHub>();
+
+            services.AddSignalR();
 
             services.AddCors(options =>
             {
@@ -69,6 +72,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/message");
             });
 
             app.UseSwagger();

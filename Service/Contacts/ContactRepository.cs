@@ -20,13 +20,15 @@ namespace Service.Contacts
         private readonly IMapper _mapper;
         private readonly IUserAccessor _userAccessor;
         private readonly IConfiguration _configuration;
+        private readonly IMessageHub _messageHub;
 
         public ContactRepository(DataContext context, IMapper mapper, IUserAccessor userAccessor,
-            IConfiguration configuration) : base(context)
+            IConfiguration configuration, IMessageHub messageHub) : base(context)
         {
             _mapper = mapper;
             _userAccessor = userAccessor;
             _configuration = configuration;
+            _messageHub = messageHub;
         }
 
         public override async Task Update(Contact newEntity)
@@ -148,6 +150,11 @@ namespace Service.Contacts
             contact.PublicId = result.PublicId;
 
             await Context.SaveChangesAsync();
+
+            await _messageHub.SendImageUploadMessageAsync(new ImageUploadEventMessageDto
+            {
+                ContactId = id
+            });
 
             if (currentPublicId != null)
             {

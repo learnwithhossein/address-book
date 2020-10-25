@@ -1,23 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Persist;
 using Service.Common;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Api.Common
 {
@@ -36,7 +37,7 @@ namespace Api.Common
                         ? restException.StatusCode
                         : HttpStatusCode.InternalServerError;
 
-                    context.Response.StatusCode = (int) statusCode;
+                    context.Response.StatusCode = (int)statusCode;
                     var message = statusCode == HttpStatusCode.InternalServerError
                         ? "An error occured in server, please try later."
                         : error.Message;
@@ -67,6 +68,22 @@ namespace Api.Common
                         IssuerSigningKey = key,
                         ValidateAudience = false,
                         ValidateIssuer = false
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var token = context.Request.Query["access_token"];
+                            var path = context.Request.Path;
+
+                            if (path.StartsWithSegments("/message") && !string.IsNullOrEmpty(token))
+                            {
+                                context.Token = token;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

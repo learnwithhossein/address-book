@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit {
         private spinner: NgxSpinnerService) { }
 
     ngOnInit(): void {
-        debugger;
         const criteriaString = localStorage.getItem('criteria');
         if (criteriaString) {
             this.criteria = JSON.parse(localStorage.getItem('criteria'));

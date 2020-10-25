@@ -24,9 +24,11 @@ namespace Service.Auth
         private readonly IConfiguration _configuration;
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
+        private readonly IMessageHub _messageHub;
 
         public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager,
-            TokenGenerator tokenGenerator, IConfiguration configuration, DataContext dataContext, IMapper mapper)
+            TokenGenerator tokenGenerator, IConfiguration configuration, DataContext dataContext, 
+            IMapper mapper, IMessageHub messageHub)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,6 +36,7 @@ namespace Service.Auth
             _configuration = configuration;
             _dataContext = dataContext;
            _mapper = mapper;
+           _messageHub = messageHub;
         }
 
         public async Task<LoginResult> LoginAsync(LoginCredentials loginCredentials)
@@ -54,6 +57,12 @@ namespace Service.Auth
             {
                 throw new RestException(HttpStatusCode.BadRequest, "Your account is not confirmed yet.");
             }
+
+            await _messageHub.SendLoginMessageAsync(new LoginEventMessageDto
+            {
+                Message = $"{user.FirstName} just logged in!",
+                UserId = user.Id
+            });
 
             return new LoginResult
             {
