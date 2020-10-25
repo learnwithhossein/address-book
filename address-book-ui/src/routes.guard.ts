@@ -15,9 +15,9 @@ export class RoutesGuard implements CanActivate {
         const can = this.auth.isLoggedIn();
         if (!can) {
             this.toastr.warning('Please loggin or register first.');
-        }
 
-        this.router.navigate(['/register']);
+            this.router.navigate(['/register']);
+        }
 
         return can;
     }

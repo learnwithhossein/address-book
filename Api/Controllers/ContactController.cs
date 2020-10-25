@@ -1,6 +1,7 @@
 ﻿using Api.Common;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
 using System.Threading.Tasks;
@@ -71,6 +72,12 @@ namespace Api.Controllers
             var result = await _repository.Search(name);
 
             return Ok(result);
+        }
+
+        [HttpPost("{id}/image")]
+        public async Task<IActionResult> UploadImage(int id, [FromForm] IFormFile file)
+        {
+            return Ok(await _repository.UploadImageAsync(id, file));
         }
     }
 }

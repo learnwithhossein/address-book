@@ -17,6 +17,7 @@ namespace Domain
         public string WorkNo { get; set; }
         public string WorkAddress { get; set; }
         public string ImageUrl { get; set; }
+        public string PublicId { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
     }

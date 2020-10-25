@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Domain;
 using Domain.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Persist;
 using Service.Common;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Service.Contacts
@@ -14,11 +19,14 @@ namespace Service.Contacts
     {
         private readonly IMapper _mapper;
         private readonly IUserAccessor _userAccessor;
+        private readonly IConfiguration _configuration;
 
-        public ContactRepository(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context)
+        public ContactRepository(DataContext context, IMapper mapper, IUserAccessor userAccessor,
+            IConfiguration configuration) : base(context)
         {
             _mapper = mapper;
             _userAccessor = userAccessor;
+            _configuration = configuration;
         }
 
         public override async Task Update(Contact newEntity)
@@ -81,7 +89,7 @@ namespace Service.Contacts
         {
             var user = await _userAccessor.GetUser();
 
-            var table = Context.Contacts.Include(x=>x.User)
+            var table = Context.Contacts.Include(x => x.User)
                 .AsQueryable();
 
             table = table.Where(x => x.UserId == user.Id);
@@ -103,10 +111,55 @@ namespace Service.Contacts
                 .SingleOrDefaultAsync(x => x.Id == id);
             if (contact == null)
             {
-                throw new RestException(System.Net.HttpStatusCode.NotFound, $"Contact with Id {id} not found.");
+                throw new RestException(HttpStatusCode.NotFound, $"Contact with Id {id} not found.");
             }
 
             return _mapper.Map<ContactToGetDto>(contact);
+        }
+
+        public async Task<ImageUploadResultDto> UploadImageAsync(int id, IFormFile file)
+        {
+            var contact = await GetById(id);
+            var currentPublicId = contact.PublicId;
+
+            var account = new Account();
+            _configuration.Bind("CloudinaryAccount", account);
+
+            var cloudinary = new Cloudinary(account);
+
+            if (file.Length <= 0) throw new RestException(HttpStatusCode.BadRequest, "Invalid file.");
+
+            await using var stream = file.OpenReadStream();
+
+            var param = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Transformation = new Transformation().Height(500).Width(500).Gravity("face").Crop("fill")
+            };
+
+            var result = await cloudinary.UploadAsync(param);
+            if (result == null || result.Error != null)
+            {
+                var message = result == null ? "Error while uploading the image." : result.Error.Message;
+                throw new RestException(HttpStatusCode.BadRequest, message);
+            }
+
+            contact.ImageUrl = result.SecureUrl.AbsoluteUri;
+            contact.PublicId = result.PublicId;
+
+            await Context.SaveChangesAsync();
+
+            if (currentPublicId != null)
+            {
+                var deleteParam = new DeletionParams(currentPublicId);
+                await cloudinary.DestroyAsync(deleteParam);
+            }
+
+            return new ImageUploadResultDto
+            {
+                PublicId = contact.PublicId,
+                ImageUrl = contact.ImageUrl
+            };
         }
     }
 }

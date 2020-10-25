@@ -11,6 +11,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { AgGridModule } from 'ag-grid-angular';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
@@ -47,11 +49,13 @@ import { RegisterConfirmedComponent } from './app/register/register-confirmed/re
         BsDropdownModule.forRoot(),
         PaginationModule.forRoot(),
         ButtonsModule.forRoot(),
+        TabsModule.forRoot(),
         RouterModule.forRoot(routes),
         AgGridModule.withComponents([]),
         BrowserModule,
         NgxSpinnerModule,
-        HttpClientModule
+        HttpClientModule,
+        FileUploadModule
     ],
     providers: [],
     bootstrap: [AppComponent]
