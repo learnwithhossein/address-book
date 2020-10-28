@@ -23,8 +23,8 @@ namespace Api
         {
             services.AddDbContext<DataContext>(options =>
             {
-                //options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
-                options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
+                options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
+                //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
             });
 
             services.AddScoped<ContactRepository, ContactRepository>();
@@ -35,9 +35,10 @@ namespace Api
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder.WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 

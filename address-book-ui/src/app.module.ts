@@ -9,7 +9,10 @@ import { FormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { AgGridModule } from 'ag-grid-angular';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { FileUploadModule } from 'ng2-file-upload';
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './app/dashboard/dashboard.component';
 import { ContactCardComponent } from './app/dashboard/contact-card/contact-card.component';
@@ -40,10 +43,14 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
         PaginationModule.forRoot(),
+        TabsModule.forRoot(),
         RouterModule.forRoot(routes),
+        ButtonsModule.forRoot(),
+        AgGridModule.withComponents([]),
         BrowserModule,
         NgxSpinnerModule,
-        HttpClientModule
+        HttpClientModule,
+        FileUploadModule
     ],
     providers: [],
     bootstrap: [AppComponent]

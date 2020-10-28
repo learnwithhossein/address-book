@@ -7,6 +7,7 @@ using Persist;
 using System;
 using Domain;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace Api
 {
@@ -36,6 +37,7 @@ namespace Api
             }
             catch (Exception ex)
             {
+
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred creating the DB.");
             }
@@ -43,6 +45,7 @@ namespace Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

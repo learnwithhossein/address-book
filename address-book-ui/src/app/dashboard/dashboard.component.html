@@ -10,7 +10,43 @@
     <p style="color: white"> Wait please... </p>
 </ngx-spinner>
 
-<div *ngIf="pagination" class="d-flex justify-content-center mt-2">
+<div *ngIf="pagination && showDashboard" class="d-flex justify-content-center mt-2">
     <pagination [(ngModel)]="pagination.pageNumber" [itemsPerPage]="pagination.pageSize" [boundaryLinks]="true"
         (pageChanged)="pageChanged($event)" [maxSize]="5" [totalItems]="pagination.totalCount"></pagination>
+        <div class="ml-4">
+            <label class="mr-2" for="pageSize">Number of itmes per page :</label>
+            <div id="pageSize" class="btn-group">
+                <label (click)=" pageSizeChanged()" class="btn btn-primary" [(ngModel)]="radioModel"
+                       btnRadio="8"  role="button">8</label>
+                <label (click)="pageSizeChanged()" class="btn btn-primary" [(ngModel)]="radioModel"
+                       btnRadio="12"  role="button">12</label>
+                <label (click)="pageSizeChanged()"  class="btn btn-primary" [(ngModel)]="radioModel"
+                       btnRadio="20"  role="button">20</label>
+              </div>
+        </div>
+       <div>
+        <div [dropup]="true" class="btn-group ml-5" dropdown>
+            <button  dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                  >
+            {{orderBy}}<span class="caret"></span>
+            </button>
+            <ul  *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-menu-dividers">
+              <li role="menuitem"><a class="dropdown-item" (click)= "changeOrderBy('FirstName')" >First Name </a></li>
+              <li role="menuitem"><a class="dropdown-item" (click)= "changeOrderBy('LastName')" >Last Name</a></li>
+              <li role="menuitem"><a class="dropdown-item" (click)= "changeOrderBy('Address')" >Address</a></li>
+            
+            </ul>
+          </div>
+       </div>
+       <div class="ml-2">
+        <label class="mr-2" for="sort">Sort:</label>
+        <div id="sort" class="btn-group">
+            <label (click)=" ChangSort()" class="btn btn-primary" [(ngModel)]="sort"
+                   btnRadio="asc"  role="button">Asc</label>
+            <label (click)=" ChangSort()" class="btn btn-primary" [(ngModel)]="sort"
+                   btnRadio="decs" role="button">Desc</label>
+          
+          </div>
+       </div>
 </div>

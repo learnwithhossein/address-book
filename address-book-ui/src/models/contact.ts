@@ -9,5 +9,5 @@ export class Contact {
     workNo: string;
     jobTitle: string;
     workAddress: string;
-    imageUrl: string;
+    imageUrl:string;
 }

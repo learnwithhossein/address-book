@@ -37,7 +37,7 @@ export class ApiService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        console.log(error);
+        // console.log(error);
 
         let message = '';
 
@@ -100,7 +100,8 @@ export class ApiService {
         delete: (id: number) => this.rest.delete('contact', id),
         update: (contact: Contact) => this.rest.put('contact', contact),
         getById: (id: number) => this.rest.get(`contact/` + id),
-        find: (criteria: any) => this.rest.getPaged(`contact/find`, criteria)
+        find: (criteria: any) => this.rest.getPaged(`contact/find`, criteria),
+        search :(text) => this.rest.get (`contact/search`,{name:text})
     }
 
     public auth = {

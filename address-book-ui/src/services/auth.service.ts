@@ -55,4 +55,6 @@ export class AuthService {
     getFirstName = () => localStorage.getItem('firstName');
 
     isLoggedIn = () => localStorage.getItem('jwtToken');
+    getToken =()=>localStorage.getItem('jwtToken');
+   
 }

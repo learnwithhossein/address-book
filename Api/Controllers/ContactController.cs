@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contacts;
 using System.Threading.Tasks;
 using Api.Common;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Api.Controllers
@@ -57,12 +58,24 @@ namespace Api.Controllers
 
         [HttpGet("find")]
         public async Task<IActionResult> Find([FromQuery] string name, [FromQuery] string phone,
-            [FromQuery] string address, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+            [FromQuery] string address, [FromQuery] int pageNumber, [FromQuery] int pageSize,[FromQuery] string orderBy,[FromQuery] string sort)
         {
-            var result = await _repository.Find(name, phone, address, pageNumber, pageSize);
+            var result = await _repository.Find(name, phone, address, pageNumber, pageSize,orderBy,sort);
             Response.AddPagination(result.Pagination);
 
             return Ok(result);
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string name)
+        {
+            var result = await _repository.Search(name);
+            return Ok(result);
+        }
+
+        [HttpPost("{id}/image")]
+        public async Task<IActionResult>UploadImage(int id, [FromForm] IFormFile file)
+        {
+            return Ok(await _repository.UploadImageAsync(id, file)); /*error*/
         }
     }
 }
