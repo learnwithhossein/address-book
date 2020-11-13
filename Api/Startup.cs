@@ -1,4 +1,7 @@
+using System.Reflection;
 using Api.Common;
+using Api.Controllers;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,11 +29,13 @@ namespace Api
                 options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
                 //options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
             });
-
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
             services.AddScoped<ContactRepository, ContactRepository>();
             services.AddScoped<AuthRepository, AuthRepository>();
             services.AddScoped<TokenGenerator, TokenGenerator>();
+            services.AddScoped<IMessageHub, MessageHub>();
 
+            services.AddSignalR();
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -45,7 +50,6 @@ namespace Api
             services.AddSecurity(Configuration);
 
             services.AddControllers();
-
             services.AddSwagger();
         }
 
@@ -64,6 +68,7 @@ namespace Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/message");
             });
 
             app.UseSwagger();

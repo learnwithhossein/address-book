@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Domain;
 using Persist;
@@ -6,6 +7,7 @@ using Service.Common;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Domain.DTO;
@@ -18,10 +20,14 @@ namespace Service.Contacts
     public class ContactRepository : GenericRepository<Contact>
     {
         private readonly IConfiguration _configuration;
+        private readonly IMessageHub _messageHub;
+        private readonly IMapper _mapper;
 
-        public ContactRepository(DataContext context ,IConfiguration configuration) : base(context)
+        public ContactRepository(DataContext context ,IConfiguration configuration,IMessageHub messageHub,IMapper mapper) : base(context)
         {
             _configuration = configuration;
+            _messageHub = messageHub;
+            _mapper = mapper;
         }
 
         public override async Task Update(Contact newEntity)
@@ -112,9 +118,13 @@ namespace Service.Contacts
                throw new RestException(HttpStatusCode.BadRequest, message);
            }
 
-           contact.ImageUrl = result.SecureUrl.AbsoluteUri; /*error*/
+           contact.ImageUrl = result.SecureUrl.AbsoluteUri; 
             contact.PublicId = result.PublicId;
            await Context.SaveChangesAsync();
+          await _messageHub.SendImageUploadMessageAsync(new ImageUploadEventMessageDto
+           {
+              ContactId = id
+           });
            
            if (currentPublicId!=null)
            {
@@ -122,11 +132,25 @@ namespace Service.Contacts
                await cloudinary.DestroyAsync(deleteparam);
            }
 
-           return new ImageUploadResultDto  /*error*/
+           return new ImageUploadResultDto  
            {
                PublicId = contact.PublicId,
                ImageUrl = contact.ImageUrl
            };
+        }
+
+        public  async Task<ContactToGetDto> GetDtoById(int id)
+        {
+            var contact = await Context.Contacts
+                .Include(x=>x.User)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            if (contact==null)
+            {
+                throw new RestException(HttpStatusCode.NotFound,$"Contact with this Id {id} not found.");
+            }
+
+            return _mapper.Map<ContactToGetDto>(contact);
+
         }
     }
 }

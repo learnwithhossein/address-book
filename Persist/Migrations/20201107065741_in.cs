@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persist.Migrations
 {
-    public partial class init : Migration
+    public partial class @in : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -173,8 +173,7 @@ namespace Persist.Migrations
                     WorkAddress = table.Column<string>(nullable: true),
                     ImageUrl = table.Column<string>(nullable: true),
                     PublicId = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true),
-                    User = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -9,8 +9,8 @@ using Persist;
 namespace Persist.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201024153850_init")]
-    partial class init
+    [Migration("20201107065741_in")]
+    partial class @in
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,9 +51,6 @@ namespace Persist.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TellNo")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("User")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
@@ -278,7 +275,7 @@ namespace Persist.Migrations
 
             modelBuilder.Entity("Domain.Contact", b =>
                 {
-                    b.HasOne("Domain.User", null)
+                    b.HasOne("Domain.User", "User")
                         .WithMany("Contacts")
                         .HasForeignKey("UserId");
                 });

@@ -51,9 +51,6 @@ namespace Persist.Migrations
                     b.Property<string>("TellNo")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("User")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
@@ -276,7 +273,7 @@ namespace Persist.Migrations
 
             modelBuilder.Entity("Domain.Contact", b =>
                 {
-                    b.HasOne("Domain.User", null)
+                    b.HasOne("Domain.User", "User")
                         .WithMany("Contacts")
                         .HasForeignKey("UserId");
                 });

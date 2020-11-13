@@ -23,6 +23,8 @@ import { NotfoundComponent } from './app/notfound/notfound.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './routes';
 import { ContactEditComponent } from './app/contact-edit/contact-edit.component';
+import { RegisterSuccessfulComponent } from './app/register/register-successful/register-successful.component';
+import { RegisterConfirmedComponent } from './app/register/register-confirmed/register-confirmed.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +35,9 @@ import { ContactEditComponent } from './app/contact-edit/contact-edit.component'
         SearchComponent,
         RegisterComponent,
         NotfoundComponent,
-        ContactEditComponent
+        ContactEditComponent,
+        RegisterSuccessfulComponent,
+        RegisterConfirmedComponent
     ],
     imports: [
         CommonModule,

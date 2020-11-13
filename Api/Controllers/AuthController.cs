@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Auth;
 using System.Threading.Tasks;
+using Domain.DTO;
 
 namespace Api.Controllers
 {
@@ -25,6 +26,19 @@ namespace Api.Controllers
         public async Task<IActionResult> LoginAsync(LoginCredentials loginCredentials)
         {
             return Ok(await _repository.LoginAsync(loginCredentials));
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserForRegisterDto user)
+        {
+          
+            return Ok(await _repository.Register(user));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            return Ok(await _repository.Get(id));
         }
     }
 }

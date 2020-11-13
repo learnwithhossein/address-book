@@ -52,7 +52,7 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _repository.GetById(id);
+            var result = await _repository.GetDtoById(id);
             return Ok(result);
         }
 
