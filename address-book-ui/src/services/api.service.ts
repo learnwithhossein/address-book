@@ -106,5 +106,7 @@ export class ApiService {
         login: (body: LoginCredentials) => this.rest.post('auth/login', body),
         register: (body) => this.rest.post('auth/register', body),
         confirm: (body) => this.rest.post('auth/confirm', body),
+        get: (id) => this.rest.get(`auth/${id}`),
+        update: (user) => this.rest.put('auth', user),
     }
 }

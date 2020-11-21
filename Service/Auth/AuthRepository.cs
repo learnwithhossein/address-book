@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Domain;
 using Domain.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Service.Auth
@@ -27,7 +29,7 @@ namespace Service.Auth
         private readonly IMessageHub _messageHub;
 
         public AuthRepository(UserManager<User> userManager, SignInManager<User> signInManager,
-            TokenGenerator tokenGenerator, IConfiguration configuration, DataContext dataContext, 
+            TokenGenerator tokenGenerator, IConfiguration configuration, DataContext dataContext,
             IMapper mapper, IMessageHub messageHub)
         {
             _userManager = userManager;
@@ -35,8 +37,8 @@ namespace Service.Auth
             _tokenGenerator = tokenGenerator;
             _configuration = configuration;
             _dataContext = dataContext;
-           _mapper = mapper;
-           _messageHub = messageHub;
+            _mapper = mapper;
+            _messageHub = messageHub;
         }
 
         public async Task<LoginResult> LoginAsync(LoginCredentials loginCredentials)
@@ -67,7 +69,8 @@ namespace Service.Auth
             return new LoginResult
             {
                 JwtToken = _tokenGenerator.Generate(user),
-                FirstName = user.FirstName
+                FirstName = user.FirstName,
+                Id = user.Id
             };
         }
 
@@ -165,6 +168,62 @@ namespace Service.Auth
             };
 
             smtp.Send(message);
+        }
+
+        public async Task<ImageUploadResultDto> UploadImageAsync(string id, IFormFile file)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var currentPublicId = user.PublicId;
+
+            var account = new Account();
+            _configuration.Bind("CloudinaryAccount", account);
+
+            var cloudinary = new Cloudinary(account);
+
+            if (file.Length <= 0) throw new RestException(HttpStatusCode.BadRequest, "Invalid file.");
+
+            await using var stream = file.OpenReadStream();
+
+            var param = new ImageUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Transformation = new Transformation().Height(500).Width(500).Gravity("face").Crop("fill")
+            };
+
+            var result = await cloudinary.UploadAsync(param);
+            if (result == null || result.Error != null)
+            {
+                var message = result == null ? "Error while uploading the image." : result.Error.Message;
+                throw new RestException(HttpStatusCode.BadRequest, message);
+            }
+
+            user.ImageUrl = result.SecureUrl.AbsoluteUri;
+            user.PublicId = result.PublicId;
+
+            await _dataContext.SaveChangesAsync();
+
+            if (currentPublicId != null)
+            {
+                var deleteParam = new DeletionParams(currentPublicId);
+                await cloudinary.DestroyAsync(deleteParam);
+            }
+
+            return new ImageUploadResultDto
+            {
+                PublicId = user.PublicId,
+                ImageUrl = user.ImageUrl
+            };
+        }
+
+        public async Task Update(User newEntity)
+        {
+            var oldEntity = await _userManager.FindByIdAsync(newEntity.Id);
+
+            oldEntity.Email = newEntity.Email;
+            oldEntity.FirstName = newEntity.FirstName;
+            oldEntity.LastName = newEntity.LastName;
+
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

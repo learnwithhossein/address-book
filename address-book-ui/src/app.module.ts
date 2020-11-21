@@ -26,6 +26,7 @@ import { routes } from './routes';
 import { ContactEditComponent } from './app/contact-edit/contact-edit.component';
 import { RegisterSuccessfulComponent } from './app/register/register-successful/register-successful.component';
 import { RegisterConfirmedComponent } from './app/register/register-confirmed/register-confirmed.component';
+import { ProfileComponent } from './app/profile/profile.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { RegisterConfirmedComponent } from './app/register/register-confirmed/re
         NotfoundComponent,
         ContactEditComponent,
         RegisterSuccessfulComponent,
-        RegisterConfirmedComponent
+        RegisterConfirmedComponent,
+        ProfileComponent
     ],
     imports: [
         CommonModule,

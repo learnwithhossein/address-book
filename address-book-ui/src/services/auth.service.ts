@@ -38,6 +38,7 @@ export class AuthService {
             .subscribe((result: LoginResult) => {
                 localStorage.setItem('jwtToken', result.jwtToken);
                 localStorage.setItem('firstName', result.firstName);
+                localStorage.setItem('id', result.id);
 
                 this.changeLoginStatus(true);
 
@@ -47,13 +48,22 @@ export class AuthService {
             });
     }
 
+    update = (user) => {
+        this.api.auth.update(user);
+    }
+
     logout = () => {
         localStorage.removeItem('jwtToken');
+        localStorage.removeItem('id');
         localStorage.removeItem('firstName');
         this.changeLoginStatus(false);
     }
 
     getFirstName = () => localStorage.getItem('firstName');
+
+    getId = () => localStorage.getItem('id');
+
+    getUser = () => this.api.auth.get(this.getId());
 
     isLoggedIn = () => {
         const token = this.getToken();

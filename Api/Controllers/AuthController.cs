@@ -3,6 +3,8 @@ using Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Service.Auth;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Api.Controllers
 {
@@ -41,9 +43,25 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(string id)
         {
             return Ok(await _repository.Get(id));
+        }
+
+        [HttpPost("{id}/image")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage(string id, [FromForm] IFormFile file)
+        {
+            return Ok(await _repository.UploadImageAsync(id, file));
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Update(User user)
+        {
+            await _repository.Update(user);
+            return Ok();
         }
     }
 }
