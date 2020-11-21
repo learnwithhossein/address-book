@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public static class ServiceExtensions
     {

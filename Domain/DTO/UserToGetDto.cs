@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domain.DTO
+namespace AddressBook.Domain.DTO
 {
     public class UserToGetDto
     {

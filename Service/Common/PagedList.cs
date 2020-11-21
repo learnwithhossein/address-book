@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public class PagedList<TEntity> : List<TEntity> where TEntity : class
     {

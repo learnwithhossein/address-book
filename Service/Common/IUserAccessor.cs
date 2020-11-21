@@ -1,7 +1,7 @@
-﻿using Domain;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using AddressBook.Domain;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public interface IUserAccessor
     {

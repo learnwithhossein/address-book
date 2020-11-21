@@ -1,4 +1,4 @@
-﻿namespace Service.Common
+﻿namespace AddressBook.Service.Common
 {
     public class EmailConfiguration
     {

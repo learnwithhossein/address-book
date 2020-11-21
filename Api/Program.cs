@@ -1,18 +1,16 @@
+using System;
+using AddressBook.Domain;
+using AddressBook.Persist;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Persist;
-using System;
-using Domain;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
 
-namespace Api
+namespace AddressBook.Api
 {
     public class Program
     {

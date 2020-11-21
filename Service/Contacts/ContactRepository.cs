@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Domain;
-using Domain.DTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Persist;
-using Service.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AddressBook.Domain;
+using AddressBook.Domain.DTO;
+using AddressBook.Persist;
+using AddressBook.Service.Common;
+using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace Service.Contacts
+namespace AddressBook.Service.Contacts
 {
     public class ContactRepository : GenericRepository<Contact>
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.DTO
+﻿namespace AddressBook.Domain.DTO
 {
     public class LoginEventMessageDto
     {

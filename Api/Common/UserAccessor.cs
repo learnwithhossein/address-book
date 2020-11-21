@@ -1,11 +1,11 @@
-﻿using Domain;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using AddressBook.Domain;
+using AddressBook.Service.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Service.Common;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Api.Common
+namespace AddressBook.Api.Common
 {
     public class UserAccessor : IUserAccessor
     {

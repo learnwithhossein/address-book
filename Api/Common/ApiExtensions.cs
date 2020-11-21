@@ -1,4 +1,13 @@
-﻿using Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using AddressBook.Domain;
+using AddressBook.Persist;
+using AddressBook.Service.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -10,17 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Persist;
-using Service.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Api.Common
+namespace AddressBook.Api.Common
 {
     public static class ApiExtensions
     {

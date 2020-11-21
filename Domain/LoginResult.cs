@@ -1,4 +1,4 @@
-﻿namespace Domain
+﻿namespace AddressBook.Domain
 {
     public class LoginResult
     {

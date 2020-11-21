@@ -1,12 +1,12 @@
-﻿using Domain;
-using Domain.DTO;
-using Microsoft.AspNetCore.Mvc;
-using Service.Auth;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using AddressBook.Domain;
+using AddressBook.Domain.DTO;
+using AddressBook.Service.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace AddressBook.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

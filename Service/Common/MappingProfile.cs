@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using Domain;
-using Domain.DTO;
+﻿using AddressBook.Domain;
+using AddressBook.Domain.DTO;
+using AutoMapper;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public class MappingProfile : Profile
     {

@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Persist;
-using Service.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using AddressBook.Persist;
+using AddressBook.Service.Common;
+using Microsoft.EntityFrameworkCore;
 
-namespace Service
+namespace AddressBook.Service
 {
     public class GenericRepository<T> where T : class
     {

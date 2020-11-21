@@ -1,7 +1,7 @@
-﻿using Domain.DTO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using AddressBook.Domain.DTO;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public interface IMessageHub
     {

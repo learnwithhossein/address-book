@@ -1,12 +1,12 @@
-﻿using Api.Common;
-using Domain;
+﻿using System.Threading.Tasks;
+using AddressBook.Api.Common;
+using AddressBook.Domain;
+using AddressBook.Service.Contacts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Service.Contacts;
-using System.Threading.Tasks;
 
-namespace Api.Controllers
+namespace AddressBook.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

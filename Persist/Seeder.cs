@@ -1,11 +1,11 @@
-﻿using Domain;
-using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using AddressBook.Domain;
+using Microsoft.AspNetCore.Identity;
 
-namespace Persist
+namespace AddressBook.Persist
 {
     public class Seeder
     {

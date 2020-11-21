@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain
+namespace AddressBook.Domain
 {
     public class LoginCredentials
     {

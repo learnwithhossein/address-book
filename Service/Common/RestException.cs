@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Service.Common
+namespace AddressBook.Service.Common
 {
     public class RestException : Exception
     {

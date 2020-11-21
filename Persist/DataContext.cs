@@ -1,8 +1,8 @@
-﻿using Domain;
+﻿using AddressBook.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Persist
+namespace AddressBook.Persist
 {
     public class DataContext : IdentityDbContext<User>
     {

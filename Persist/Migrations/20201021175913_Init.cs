@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Persist.Migrations
+namespace AddressBook.Persist.Migrations
 {
     public partial class Init : Migration
     {

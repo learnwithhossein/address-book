@@ -1,9 +1,9 @@
-﻿using Domain.DTO;
+﻿using System.Threading.Tasks;
+using AddressBook.Domain.DTO;
+using AddressBook.Service.Common;
 using Microsoft.AspNetCore.SignalR;
-using Service.Common;
-using System.Threading.Tasks;
 
-namespace Api.Common
+namespace AddressBook.Api.Common
 {
     public class MessageHub : Hub, IMessageHub
     {

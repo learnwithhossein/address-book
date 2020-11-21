@@ -1,16 +1,16 @@
-using Api.Common;
+using System.Reflection;
+using AddressBook.Api.Common;
+using AddressBook.Persist;
+using AddressBook.Service.Auth;
+using AddressBook.Service.Common;
+using AddressBook.Service.Contacts;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persist;
-using Service.Auth;
-using Service.Common;
-using Service.Contacts;
-using System.Reflection;
 
-namespace Api
+namespace AddressBook.Api
 {
     public class Startup
     {
