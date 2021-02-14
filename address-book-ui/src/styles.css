@@ -1,7 +1,7 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
-@import '../node_modules/ngx-toastr/toastr.css';
 @import '../node_modules/bootswatch/dist/minty/bootstrap.min.css';
+@import '../node_modules/ngx-toastr/toastr.css';
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.min.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-balham.min.css";
 
